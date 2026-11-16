@@ -7,7 +7,7 @@
   const number=n=>n.toLocaleString('pt-BR');
   const compact=(n,digits=2)=>`R$ ${(n/1000000).toLocaleString('pt-BR',{minimumFractionDigits:digits,maximumFractionDigits:digits})} mi`;
   const metric=(label,value,note='')=>`<article class="metric"><p>${label}</p><strong>${value}</strong>${note?`<small>${note}</small>`:''}</article>`;
-  document.querySelector('#main').innerHTML=`
+  document.querySelector('#main').innerHTML=`${window.EDUCA.ui.viewNavigation()}
   <section class="portal-heading"><div><p class="eyebrow">Gestão do benefício educacional</p><h1>Painel Mútua Educa+</h1><p>Turmas em operação e as contas que sustentam o benefício.</p></div><span class="line-icon">${icon('monitoring')}</span></section>
   <section id="resumo" class="portal-section"><div class="section-heading"><h2>Turmas abertas agora</h2><span class="badge green">${courses.length} turmas publicadas</span></div>
   <div class="metrics five">${metric('Turmas',courses.length)}${metric('Associados inscritos',number(students))}${metric('Vagas publicadas',number(seats))}${metric('Ocupação',`${(students/seats*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%`)}${metric('Valor de curso contratado',money(volume),'Inscritos × mensalidade × meses')}</div>

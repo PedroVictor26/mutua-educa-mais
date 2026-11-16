@@ -86,3 +86,25 @@ footer{line-height:1.8}dialog{box-shadow:none}dialog::backdrop{background:#12326
 @media(min-width:600px){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.form-field:first-child{grid-column:1/-1}.transfer-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.transfer-card{padding:var(--s2)}.transfer-card>strong{font-size:var(--s3)}.metrics{grid-template-columns:repeat(4,minmax(0,1fr))}.metrics.five .metric:last-child{grid-column:span 2}.portal-heading>.line-icon{display:grid}}
 @media(min-width:900px){.scenario-layout{grid-template-columns:1fr 1.15fr}.publish-layout{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}.portal-columns{grid-template-columns:repeat(2,minmax(0,1fr))}.scenario-results{padding:var(--s5)}.portal-heading{padding-block:var(--s4) var(--s6)}.portal-section{margin-block:var(--s6)}.metrics.five{grid-template-columns:repeat(4,minmax(0,1fr)) 1.6fr}.metrics.five .metric:last-child{grid-column:auto}.transfer-card{padding:var(--s3)}.transfer-card>strong{font-size:var(--s4)}}
 @media(min-width:1100px){.header-inner{gap:var(--s3)}.desktop-nav{gap:var(--s3)}.view-switch{display:flex;align-items:center;gap:var(--s1);margin-left:auto;font-size:11px}.view-switch span{opacity:.8}.view-switch a{color:var(--white);display:flex;align-items:center;min-height:var(--s5);padding-inline:var(--s1);border-radius:var(--pill)}.view-switch a[aria-current]{background:var(--navy-dark)}.account{margin-left:0}.portal .metric{padding:var(--s3)}}
+
+/* Platform entry reuses the shared palette, cards and spacing scale. */
+:root{--role-dialog-width:960px}
+.hero-layout{padding-block:var(--s4)}
+.hero-copy .eyebrow{margin-bottom:var(--s2)}
+.hero-description{line-height:1.6;margin-block:var(--s2) var(--s3)}
+.hero-actions{display:grid;gap:var(--s1)}
+.hero-actions .button{width:100%}
+.platform-entry{padding-block:var(--s4)}
+.platform-entry h2{margin-bottom:var(--s3)}
+.role-cards{display:grid;gap:var(--s2);min-width:0}
+.role-card{display:flex;flex-direction:column;align-items:flex-start;gap:var(--s1);min-width:0;padding:var(--s3);border:1px solid var(--line);border-radius:var(--radius);background:var(--soft)}
+.role-card .line-icon{width:var(--s5);height:var(--s5);margin:0 0 var(--s1)}
+.role-card p{margin:0 0 var(--s2);font-size:inherit}
+.role-card .button{margin-top:auto;min-height:var(--s6);width:100%}
+#role-dialog{width:min(var(--role-dialog-width),calc(100% - var(--s4)));max-height:calc(100dvh - var(--s4));padding:var(--s3);overflow-y:auto}
+#role-dialog h2{margin:0 var(--s5) var(--s3) 0}
+#role-dialog .role-card{padding:var(--s2)}
+.view-navigation{display:flex;flex-wrap:wrap;gap:var(--s2);margin-bottom:var(--s2)}
+.view-navigation a,.view-navigation button{display:inline-flex;align-items:center;min-height:var(--s5);padding:var(--s1);color:var(--blue);font:inherit;font-weight:700;text-decoration:underline;background:transparent;border:0;border-radius:var(--s1)}
+@media(min-width:768px){.hero-layout{padding-block:var(--s6)}.hero-copy .eyebrow{margin-bottom:var(--s3)}.hero-description{line-height:1.75;margin-block:var(--s3) var(--s4)}.hero-actions{display:flex;gap:var(--s2)}.hero-actions .button{width:auto}.role-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1100px){.hero-layout{padding-block:var(--s10) var(--s12)}.view-switch{font-size:inherit;font-weight:700}.view-switch span{opacity:1}.view-switch a{min-height:var(--s5);padding-inline:var(--s2)}.view-switch a[aria-current]{background:var(--white);color:var(--blue)}}
