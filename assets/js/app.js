@@ -3,15 +3,41 @@
   const {courses, rate} = window.EDUCA;
   const money = n => n.toLocaleString('pt-BR', {style:'currency',currency:'BRL'});
   const pmt = (principal, months) => principal * rate / (1 - Math.pow(1 + rate, -months));
-  const icon = name => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
+  // Shared, local line icons. No icon font or remote JavaScript.
+  const paths = {
+    home:'M3 10 12 3l9 7M5 9v12h5v-7h4v7h5V9',
+    school:'m2 9 10-5 10 5-10 5L2 9Zm4 2v6l6 3 6-3v-6M22 9v8',
+    groups:'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M16 4a4 4 0 0 1 0 8m6 9v-2a4 4 0 0 0-3-4M13 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
+    account_balance:'m3 8 9-5 9 5H3Zm2 3v7m7-7v7m7-7v7M3 21h18',
+    calculate:'M5 3h14v18H5V3Zm3 4h8M8 12h2m4 0h2m-8 5h2m4 0h2',
+    menu_book:'M12 5v16M3 4h5l4 2 4-2h5v15h-5l-4 2-4-2H3V4Z',
+    person:'M20 21v-2a6 6 0 0 0-6-6h-4a6 6 0 0 0-6 6v2M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
+    search:'m21 21-5-5M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0',
+    schedule:'M12 7v5l3 2M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',
+    arrow_forward:'M4 12h16m-6-6 6 6-6 6', arrow_back:'M20 12H4m6-6-6 6 6 6',
+    chevron_right:'m9 5 7 7-7 7', check:'m5 12 4 4L19 6',
+    verified:'m8 12 3 3 5-6M12 2l8 4v6c0 5-8 10-8 10S4 17 4 12V6l8-4Z',
+    help:'M9 8a3 3 0 1 1 5 2c-2 1-2 2-2 3m0 3v1M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',
+    computer:'M3 3h18v14H3V3Zm5 18h8m-4-4v4',
+    calendar_month:'M3 5h18v16H3V5Zm4-3v6m10-6v6M3 10h18',
+    trending_up:'m3 17 6-6 4 4 8-10m-6 0h6v6',
+    live_tv:'M3 7h18v14H3V7Zm5-5 4 5 4-5m-6 12 5-3-5-3v6Z',
+    qr_code_2:'M3 3h6v6H3V3Zm12 0h6v6h-6V3ZM3 15h6v6H3v-6Zm12 0h3v3h3v3h-6v-6Z',
+    support_agent:'M4 15v-3a8 8 0 0 1 16 0v3m-16-3H2v6h4v-6H4Zm16 0h2v6h-4v-6h2Zm0 6v3h-7',
+    workspace_premium:'M8 14 6 22l6-3 6 3-2-8M19 8A7 7 0 1 1 5 8a7 7 0 0 1 14 0',
+    monitoring:'M4 20V10m8 10V4m8 16v-7M2 22h20',
+    route:'M6 5h12v7H6v7h12M8 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0m12 14a2 2 0 1 1-4 0 2 2 0 0 1 4 0'
+  };
+  const aliases={account_circle:'person',account_balance_wallet:'account_balance',cast_for_education:'live_tv',radio_button_checked:'check',search_off:'search'};
+  const icon = name => `<svg class="material-symbols-outlined" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[aliases[name] || name] || paths.school}"/></svg>`;
   const page = document.body.dataset.page;
   const params = new URLSearchParams(location.search);
   const course = courses.find(c => c.id === params.get('c')) || courses[0];
   const main = document.querySelector('#main');
-  const routes = [['catalog','index.html','Cursos','school'],['simulator','simulador.html','Simulador','calculate'],['dashboard','meu-curso.html','Meu curso','menu_book']];
+  const routes = [['home','index.html','Início','home'],['catalog','cursos.html','Cursos','school'],['simulator','simulador.html','Simulador','calculate'],['dashboard','meu-curso.html','Meu curso','menu_book']];
   const navLinks = mobile => routes.map(([key,url,label,symbol]) => `<a href="${url}"${(page===key || (page==='course' && key==='catalog'))?' aria-current="page"':''}>${mobile?icon(symbol):''}${label}</a>`).join('');
   document.querySelector('#header').innerHTML = `<div class="container header-inner"><a class="brand" href="index.html" aria-label="Mútua Educa+, início"><img src="assets/img/logo-mutua-branca.png" width="125" height="35" alt="Mútua"><span>Educa+</span></a><nav class="desktop-nav" aria-label="Navegação principal">${navLinks(false)}</nav><div class="account"><div class="account-text">Eng. Conrado Pires<small>Associado</small></div><button class="icon-button" data-modal="profile" aria-label="Perfil de Eng. Conrado Pires">${icon('person')}</button></div></div>`;
-  document.querySelector('#mobile-nav').innerHTML = `${navLinks(true)}<button data-modal="profile">${icon('account_circle')}Perfil</button>`;
+  document.querySelector('#mobile-nav').innerHTML = `${navLinks(true)}`;
   const disclaimer = 'Parcela fixa pela Tabela Price, sem correção.';
   let creditRequestText = '';
   const meta = c => `${c.months} meses · ${c.hours} h · ${c.mode}`;
@@ -44,7 +70,7 @@
   }
   function detail() {
     const c=course,total=c.price*c.months;
-    main.innerHTML=`<a class="back" href="index.html">${icon('arrow_back')} Voltar aos cursos</a><div class="split"><div class="stack"><section class="panel course-title"><img class="course-banner" src="assets/img/${c.image}" width="900" height="500" alt="Área de atuação: ${c.name}" fetchpriority="high"><span class="badge">${c.type}</span><div class="partner">Instituição parceira</div><h1>${c.name}</h1><div class="details-meta"><span>${icon('schedule')} ${c.months} meses</span><span>${icon('menu_book')} ${c.hours} h</span><span>${icon('computer')} ${c.mode}</span></div><span class="badge">${icon('calendar_month')} Início: Turma 2026.2</span></section><section class="panel"><div class="eyebrow">Seu percurso de aprendizagem</div><h2>Conteúdo do curso</h2><ol class="module-list">${c.modules.map(m=>`<li>${m}</li>`).join('')}</ol></section></div><aside class="stack"><section class="panel offer"><span class="badge green">-30% turma Mútua</span><h2 style="margin-top:18px">Sua formação começa aqui</h2><del>De ${money(c.before)}/mês</del><div class="price">${money(c.price)}<small>/mês</small></div><p>Total do curso: <strong>${money(total)}</strong> · ${c.months} meses</p>${bar(c)}<p>${vacancies(c.seats-c.enrolled)}</p><a class="button" href="simulador.html?c=${c.id}">Simular crédito para este curso</a><button class="button secondary" data-modal="reserve">Reservar vaga na turma ${icon('arrow_forward')}</button></section><section class="panel"><div class="eyebrow">Escolha como se planejar</div><h2>Como pagar</h2><div class="payment-options"><div class="payment-option"><h3>À vista</h3><p>${money(total)} com a instituição parceira.</p></div><div class="payment-option"><h3>Crédito Mútua</h3><p><strong>24x de ${money(pmt(total,24))}</strong>.</p></div></div><p class="disclaimer">${disclaimer}</p></section></aside></div>`;
+    main.innerHTML=`<a class="back" href="cursos.html">${icon('arrow_back')} Voltar aos cursos</a><div class="split"><div class="stack"><section class="panel course-title"><img class="course-banner" src="assets/img/${c.image}" width="900" height="500" alt="Área de atuação: ${c.name}" fetchpriority="high"><span class="badge">${c.type}</span><div class="partner">Instituição parceira</div><h1>${c.name}</h1><div class="details-meta"><span>${icon('schedule')} ${c.months} meses</span><span>${icon('menu_book')} ${c.hours} h</span><span>${icon('computer')} ${c.mode}</span></div><span class="badge">${icon('calendar_month')} Início: Turma 2026.2</span></section><section class="panel"><div class="eyebrow">Seu percurso de aprendizagem</div><h2>Conteúdo do curso</h2><ol class="module-list">${c.modules.map(m=>`<li>${m}</li>`).join('')}</ol></section></div><aside class="stack"><section class="panel offer"><span class="badge green">-30% turma Mútua</span><h2 style="margin-top:18px">Sua formação começa aqui</h2><del>De ${money(c.before)}/mês</del><div class="price">${money(c.price)}<small>/mês</small></div><p>Total do curso: <strong>${money(total)}</strong> · ${c.months} meses</p>${bar(c)}<p>${vacancies(c.seats-c.enrolled)}</p><a class="button" href="simulador.html?c=${c.id}">Simular crédito para este curso</a><button class="button secondary" data-modal="reserve">Reservar vaga na turma ${icon('arrow_forward')}</button></section><section class="panel"><div class="eyebrow">Escolha como se planejar</div><h2>Como pagar</h2><div class="payment-options"><div class="payment-option"><h3>À vista</h3><p>${money(total)} com a instituição parceira.</p></div><div class="payment-option"><h3>Crédito Mútua</h3><p><strong>24x de ${money(pmt(total,24))}</strong>.</p></div></div><p class="disclaimer">${disclaimer}</p></section></aside></div>`;
   }
   function simulator() {
     const c=course,total=c.price*c.months;
@@ -74,9 +100,33 @@
     update();
   }
   function dashboard(){
-    main.innerHTML=`<section class="panel dashboard-heading"><div class="welcome"><p>Olá, Eng. Conrado</p><span class="badge">Associado</span></div><h1>Engenharia de Pavimentos</h1><p>Instituição parceira · Pós-graduação · Turma 2026.2</p></section><div class="dashboard-grid"><div class="stack"><div class="student-photo"><img src="assets/img/aluno-pavimento.jpg" width="900" height="500" alt="Profissional acompanhando uma obra de pavimentação" fetchpriority="high"><div class="photo-bottom"><span class="badge">${icon('groups')} Turma 2026.2</span><span>EAD · aulas ao vivo</span></div></div><section class="panel"><div class="panel-title"><h2>${icon('trending_up')} Progresso do curso</h2><strong>50%</strong></div><div class="track blue" style="height:10px" role="progressbar" aria-label="Progresso do curso" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><span style="width:50%"></span></div><div class="progress-details"><div><small>Módulo 3 de 6</small>3 de 6 concluídos</div><div><small>Carga horária</small><strong>210 h de 420 h</strong></div></div></section><section class="panel next-class"><div class="panel-title"><h2>${icon('live_tv')} Próxima aula</h2><span class="badge">QUI, 19H</span></div><h3>Dimensionamento de pavimento flexível</h3><p>${icon('cast_for_education')} Instituição parceira · aula ao vivo</p><button class="button" data-modal="classroom">Acessar sala virtual ${icon('arrow_forward')}</button></section><section class="panel support">${icon('support_agent')}<div><h3>Dúvidas acadêmicas?</h3><p>Instituição parceira</p></div><button class="button secondary" data-modal="support">Abrir ${icon('chevron_right')}</button></section></div><div class="stack"><section class="panel"><div class="panel-title"><h2>${icon('account_balance_wallet')} Meu crédito Mútua</h2><span class="badge green"><span class="dot"></span>Em dia</span></div><div class="credit-details"><div><small>Parcela 5 de 24</small><strong>R$ 394,72</strong></div><div><small>Vencimento</small><strong>10/12/2026</strong></div></div><button class="text-button" data-modal="payment"><span>${icon('qr_code_2')} Ver boleto ou Pix</span>${icon('chevron_right')}</button></section><section class="panel approval"><div class="step-icon">${icon('workspace_premium')}</div><div><h2>Aprovação contínua</h2><p>Média atual de aproveitamento: <strong>9,2</strong></p></div></section><section class="panel"><div class="eyebrow">Sua formação, passo a passo</div><h2>Jornada acadêmica</h2><ol class="journey">${[['done','check','Matrícula confirmada','Matrícula na instituição parceira','Concluído'],['done','check','Desconto de turma 30%','Turma Mútua fechada','Concluído'],['current','radio_button_checked','Curso em andamento','Progresso acadêmico e crédito acompanhados','Você está aqui'],['','4','Certificado','Emitido pela instituição parceira','Previsto'],['','5','Pedido ao Crea com o certificado','Próxima etapa após a conclusão do curso','Final']].map(([status,symbol,title,desc,badge])=>`<li class="${status}"><span class="stage">${status?icon(symbol):symbol}</span><div><h3>${title}</h3><p>${desc}</p><span class="badge${status==='done'?' green':''}">${badge}</span></div></li>`).join('')}</ol></section></div></div>`;
+    main.innerHTML=`<section class="panel dashboard-heading"><div class="welcome"><p>Olá, Eng. Conrado</p><span class="badge">Associado</span></div><h1>Engenharia de Pavimentos</h1><p>Instituição parceira · Pós-graduação · Turma 2026.2</p></section><div class="dashboard-grid"><div class="stack"><div class="student-photo"><img src="assets/img/aluno-pavimento.jpg" width="900" height="500" alt="Profissional acompanhando uma obra de pavimentação" fetchpriority="high"><div class="photo-bottom"><span class="badge">${icon('groups')} Turma 2026.2</span><span>EAD · aulas ao vivo</span></div></div><section class="panel"><div class="panel-title"><h2>${icon('trending_up')} Progresso do curso</h2><strong>50%</strong></div><div class="track blue" style="height:10px" role="progressbar" aria-label="Progresso do curso" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"><span style="width:50%"></span></div><div class="progress-details"><div><small>Módulo 3 de 6</small>3 de 6 concluídos</div><div><small>Carga horária</small><strong>210 h de 420 h</strong></div></div></section><section class="panel next-class"><div class="panel-title"><h2>${icon('live_tv')} Próxima aula</h2><span class="badge">QUI, 19H</span></div><h3>Dimensionamento de pavimento flexível</h3><p>${icon('cast_for_education')} Instituição parceira · aula ao vivo</p><button class="button" data-modal="classroom">Acessar sala virtual ${icon('arrow_forward')}</button></section><section class="panel support">${icon('support_agent')}<div><h3>Dúvidas acadêmicas?</h3><p>Instituição parceira</p></div><button class="button secondary" data-modal="support">Abrir ${icon('chevron_right')}</button></section></div><div class="stack"><section class="panel"><div class="panel-title"><h2>${icon('account_balance_wallet')} Meu crédito Mútua</h2><span class="badge green"><span class="dot"></span>Em dia</span></div><div class="credit-details"><div><small>Parcela 5 de 24</small><strong>R$ 394,72</strong></div><div><small>Vencimento</small><strong>10/12/2026</strong></div></div><button class="text-button" data-modal="payment"><span>${icon('qr_code_2')} Ver boleto ou Pix</span>${icon('chevron_right')}</button></section><section class="panel approval"><div class="step-icon">${icon('workspace_premium')}</div><div><h2>Aprovação contínua</h2><p>Média atual de aproveitamento: <strong>9,2</strong></p></div></section><section class="panel"><div class="eyebrow">Sua formação, passo a passo</div><h2>Etapas da formação</h2><ol class="journey">${[['done','check','Matrícula confirmada','Matrícula na instituição parceira','Concluído'],['done','check','Desconto de turma 30%','Turma Mútua fechada','Concluído'],['current','radio_button_checked','Curso em andamento','Progresso acadêmico e crédito acompanhados','Você está aqui'],['','4','Certificado','Emitido pela instituição parceira','Previsto'],['','5','Pedido ao Crea com o certificado','Próxima etapa após a conclusão do curso','Final']].map(([status,symbol,title,desc,badge])=>`<li class="${status}"><span class="stage">${status?icon(symbol):symbol}</span><div><h3>${title}</h3><p>${desc}</p><span class="badge${status==='done'?' green':''}">${badge}</span></div></li>`).join('')}</ol></section></div></div>`;
   }
-  ({catalog,course:detail,simulator,dashboard}[page] || catalog)();
+  function home() {
+    const c=courses.find(c=>c.id==='pavimentos');
+    const principal=c.price*c.months, table=c.before*c.months;
+    // The comparison totals the displayed installments, rounded to cents.
+    // The simulator retains its precise PMT for its interest breakdown.
+    const payment=Math.round(pmt(principal,24)*100)/100, paid=payment*24;
+    document.querySelector('#hero-enrollment').innerHTML=`<span class="eyebrow">Turma em formação</span><strong>${c.name}</strong><p>${c.enrolled} de ${c.seats} associados · faltam ${c.seats-c.enrolled}</p>${bar(c)}`;
+    document.querySelector('#hero-payment').innerHTML=`${icon('account_balance')}<div><strong>24x de ${money(payment)}</strong><p>parcela fixa</p></div>`;
+    document.querySelector('#comparison-course').textContent=`${c.name} · ${c.months} meses`;
+    document.querySelector('#comparison').innerHTML=`<article><span class="eyebrow">Sozinho, preço de tabela</span><p>${c.months} x ${money(c.before)}</p><strong>${money(table)}</strong><small>Valor total do curso</small></article><article class="collective-price"><span class="eyebrow">Com a turma e o crédito Mútua</span><p>${c.months} x ${money(c.price)} = ${money(principal)} de curso</p><strong>24x de ${money(payment)}</strong><small>${money(paid)} com juros</small></article>`;
+    document.querySelector('#saving').textContent=`Você economiza ${money(table-paid)} mesmo pagando juros.`;
+    document.querySelector('#formation-courses').innerHTML=[...courses].sort((a,b)=>(a.seats-a.enrolled)-(b.seats-b.enrolled)).slice(0,3).map(card).join('');
+    document.querySelectorAll('[data-icon]').forEach(el=>el.innerHTML=icon(el.dataset.icon));
+    const targets=document.querySelectorAll('.number-reveal,.landing .track>span');
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+    if(reduced.matches || !('IntersectionObserver' in window))return;
+    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
+      if(!entry.isIntersecting)return;
+      entry.target.classList.remove('motion-pending');
+      observer.unobserve(entry.target);
+    }),{threshold:0.25});
+    targets.forEach(el=>{el.classList.add('motion-ready','motion-pending');observer.observe(el);});
+    reduced.addEventListener('change',()=>{if(reduced.matches){targets.forEach(el=>el.classList.remove('motion-pending'));observer.disconnect();}});
+  }
+  ({home,catalog,course:detail,simulator,dashboard}[page] || catalog)();
   const modal=document.querySelector('#modal');
   const modalContent={
     profile:['Meu perfil','Eng. Conrado Pires · Associado. Aqui ficam seus dados, documentos e preferências de contato.'],
